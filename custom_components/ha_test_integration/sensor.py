@@ -30,7 +30,7 @@ class IPSensor(SensorEntity):
 
     def __init__(self, ipv6: bool):
         self.ipv6 = ipv6
-        self.attr_icon = 'mdi:web'
+        self._attr_icon = 'mdi:web'
         self._attr_name = "Public IPv4"
         self._attr_unique_id = "publicipv4"
         if (self.ipv6):
