@@ -11,7 +11,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-import requests
+import requests, json
 
 async def async_setup_platform(
     hass: HomeAssistant,
@@ -38,5 +38,5 @@ class ExampleSensor(SensorEntity):
         This is the only method that should fetch new data for Home Assistant.
         """
         resp = requests.get('https://api.ipify.org/?format=json')
-        ip = resp.json()['ip']
+        ip = json.loads(resp.json())['ip']
         self._attr_native_value = ip
