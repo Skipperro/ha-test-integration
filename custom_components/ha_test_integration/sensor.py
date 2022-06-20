@@ -20,23 +20,26 @@ async def async_setup_platform(
     discovery_info: DiscoveryInfoType | None = None
 ) -> None:
     """Set up the sensor platform."""
-    async_add_entities([ExampleSensor()])
+    async_add_entities([IPSensor(False), IPSensor(True)])
 
 
 
-class ExampleSensor(SensorEntity):
+class IPSensor(SensorEntity):
     """Representation of a Sensor."""
 
-    _attr_name = "Public IPv4"
-    # _attr_native_unit_of_measurement = TEMP_CELSIUS
-    #_attr_device_class = SensorDeviceClass. TEMPERATURE
-    #_attr_state_class = SensorStateClass.MEASUREMENT
 
-    async def async_update(self) -> None:
-        """Fetch new state data for the sensor.
+    def __init__(self, ipv6: bool):
+        self.ipv6 = ipv6
+        self._attr_name = "Public IPv4"
+        self._attr_unique_id = "publicipv4"
+        if (self.ipv6):
+            self._attr_name = "Public IPv6"
+            self._attr_unique_id = "publicipv6"
 
-        This is the only method that should fetch new data for Home Assistant.
-        """
-        resp = requests.get('https://api.ipify.org/?format=json')
-        ip = resp.json()['ip']
+    def update(self) -> None:
+        if (self.ipv6):
+            resp = requests.get('https://api64.ipify.org/?format=json')
+        else:
+            resp = requests.get('https://api.ipify.org/?format=json')
+        ip = str(resp.json()['ip'])
         self._attr_native_value = ip
