@@ -8,10 +8,19 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.const import TEMP_CELSIUS
 from homeassistant.core import HomeAssistant
+from homeassistant import config_entries
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from const import DOMAIN
+import httpx
 
-import requests
+async def async_setup_entry(
+    hass: HomeAssistant,
+    config_entry: config_entries.ConfigEntry,
+    async_add_entities,
+):
+    config = hass.data[DOMAIN][config_entry.entry_id]
+    async_add_entities([IPSensor(False), IPSensor(True)])
 
 async def async_setup_platform(
     hass: HomeAssistant,
@@ -37,10 +46,12 @@ class IPSensor(SensorEntity):
             self._attr_name = "Public IPv6"
             self._attr_unique_id = "publicipv6"
 
-    def update(self) -> None:
+    async def async_update(self) -> None:
+        client = httpx.AsyncClient()
         if (self.ipv6):
-            resp = requests.get('https://api64.ipify.org/?format=json')
+            r = await client.get('https://api64.ipify.org/?format=json')
         else:
-            resp = requests.get('https://api.ipify.org/?format=json')
-        ip = str(resp.json()['ip'])
+            r = await client.get('https://api.ipify.org/?format=json')
+        await client.aclose()
+        ip = str(r.json()['ip'])
         self._attr_native_value = ip

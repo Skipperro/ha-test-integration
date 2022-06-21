@@ -1,0 +1,1 @@
+DOMAIN = "ha_test_integration"
