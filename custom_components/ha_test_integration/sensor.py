@@ -11,8 +11,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant import config_entries
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-from const import DOMAIN
-import httpx
+from custom_components.ha_test_integration.const import DOMAIN
+import aiohttp
+import asyncio
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -47,11 +48,14 @@ class IPSensor(SensorEntity):
             self._attr_unique_id = "publicipv6"
 
     async def async_update(self) -> None:
-        client = httpx.AsyncClient()
         if (self.ipv6):
-            r = await client.get('https://api64.ipify.org/?format=json')
+            url = 'https://api64.ipify.org/?format=json'
         else:
-            r = await client.get('https://api.ipify.org/?format=json')
-        await client.aclose()
-        ip = str(r.json()['ip'])
+            url = 'https://api.ipify.org/?format=json'
+
+        client = aiohttp.ClientSession()
+        r = await client.get(url)
+        await client.close()
+        json = await r.json()
+        ip = str(json['ip'])
         self._attr_native_value = ip
