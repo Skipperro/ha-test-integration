@@ -4,7 +4,7 @@
   "documentation": "https://github.com/home-assistant/example-custom-config/tree/master/custom_components/example_sensor/",
   "dependencies": [],
   "codeowners": [],
-  "requirements": ["httpx==0.21.0"],
+  "requirements": [],
   "iot_class": "cloud_polling",
   "config_flow": true,
   "version": "0.1.0"
