@@ -56,6 +56,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         entries = async_entries_for_config_entry(
             entity_registry, self.config_entry.entry_id
         )
+        
         _LOGGER.warning(json.dumps(self.config_entry))
         if user_input is not None:
             self.data = user_input
