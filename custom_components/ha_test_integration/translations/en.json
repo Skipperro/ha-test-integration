@@ -5,7 +5,7 @@
       "invalid_path": "The path provided is not valid. Should be in the format `user/repo-name`."
     },
     "step": {
-      "basics": {
+      "user": {
         "data": {
           "access_token": "GitHub Access Token",
           "url": "GitHub Enterprise server URL",
