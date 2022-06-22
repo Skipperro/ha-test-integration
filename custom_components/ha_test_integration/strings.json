@@ -30,7 +30,7 @@
       "invalid_path": "The path provided is not valid. Should be in the format `user/repo-name` and should be a valid github repository."
     },
     "step": {
-      "basics": {
+      "options": {
         "data": {
           "access_token": "GitHub Access Token",
           "url": "GitHub Enterprise server URL",

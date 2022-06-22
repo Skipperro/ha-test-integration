@@ -22,7 +22,7 @@ CONFIG_SCHEMA = vol.Schema(
 class CustomFlow(config_entries.ConfigFlow, domain=DOMAIN):
     data: Optional[Dict[str, Any]]
 
-    async def async_step_user(self, user_input: Optional[Dict[str, Any]] = None):
+    async def async_step_basics(self, user_input: Optional[Dict[str, Any]] = None):
         errors: Dict[str, str] = {}
         if user_input is not None:
             self.data = user_input
@@ -42,7 +42,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         self.config_entry = config_entry
 
-    async def async_step_basics(
+    async def async_step_options(
         self, user_input: Dict[str, Any] = None
     ) -> Dict[str, Any]:
         errors: Dict[str, str] = {}
@@ -50,4 +50,4 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             self.data = user_input
             return self.async_create_entry(title="Test Integration", data=self.data)
 
-        return self.async_show_form(step_id="basics", data_schema=CONFIG_SCHEMA, errors=errors)
+        return self.async_show_form(step_id="options", data_schema=CONFIG_SCHEMA, errors=errors)
