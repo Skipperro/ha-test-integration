@@ -9,13 +9,19 @@ import voluptuous as vol
 
 from homeassistant import config_entries, exceptions
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.entity_registry import (
+    async_entries_for_config_entry,
+    async_get_registry,
+)
 
 from .const import DOMAIN  # pylint:disable=unused-import
+
+big_int = vol.All(vol.Coerce(int), vol.Range(min=300))
 
 _LOGGER = logging.getLogger(__name__)
 CONFIG_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_SCAN_INTERVAL): cv.positive_int,
+        vol.Required(CONF_SCAN_INTERVAL, "message", default=300, description="descri"): big_int,
     }
 )
 
@@ -46,8 +52,17 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         self, user_input: Dict[str, Any] = None
     ) -> Dict[str, Any]:
         errors: Dict[str, str] = {}
+        entity_registry = await async_get_registry(self.hass)
+        entries = async_entries_for_config_entry(
+            entity_registry, self.config_entry.entry_id
+        )
         if user_input is not None:
             self.data = user_input
             return self.async_create_entry(title="Test Integration", data=self.data)
 
-        return self.async_show_form(step_id="init", data_schema=CONFIG_SCHEMA, errors=errors)
+        OPTIONS_SCHEMA = vol.Schema(
+            {
+                vol.Required(CONF_SCAN_INTERVAL, "omessage", default=350, description="odescri"): big_int,
+            }
+        )
+        return self.async_show_form(step_id="init", data_schema=OPTIONS_SCHEMA, errors=errors)
