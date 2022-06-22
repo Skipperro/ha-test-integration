@@ -62,7 +62,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
 
         OPTIONS_SCHEMA = vol.Schema(
             {
-                vol.Required(CONF_SCAN_INTERVAL, "omessage", default=350, description="odescri"): big_int,
+                vol.Required(CONF_SCAN_INTERVAL, "omessage", default=self.data[CONF_SCAN_INTERVAL], description="odescri"): big_int,
             }
         )
         return self.async_show_form(step_id="init", data_schema=OPTIONS_SCHEMA, errors=errors)
