@@ -56,7 +56,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         entries = async_entries_for_config_entry(
             entity_registry, self.config_entry.entry_id
         )
-        _LOGGER.warning(entries)
+        _LOGGER.warning(self.config_entry)
         if user_input is not None:
             self.data = user_input
             return self.async_create_entry(title="Test Integration", data=self.data)
