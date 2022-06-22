@@ -56,13 +56,14 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         entries = async_entries_for_config_entry(
             entity_registry, self.config_entry.entry_id
         )
+        _LOGGER.warning(entries)
         if user_input is not None:
             self.data = user_input
             return self.async_create_entry(title="Test Integration", data=self.data)
 
         OPTIONS_SCHEMA = vol.Schema(
             {
-                vol.Required(CONF_SCAN_INTERVAL, "omessage", default=self.data[CONF_SCAN_INTERVAL], description="odescri"): big_int,
+                vol.Required(CONF_SCAN_INTERVAL, "omessage", default=350, description="odescri"): big_int,
             }
         )
         return self.async_show_form(step_id="init", data_schema=OPTIONS_SCHEMA, errors=errors)
