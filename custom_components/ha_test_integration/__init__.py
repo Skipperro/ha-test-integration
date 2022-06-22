@@ -19,9 +19,9 @@ async def async_setup_entry(
         hass.config_entries.async_forward_entry_setup(entry, "sensor")
     )
     return True
-
-# async def options_update_listener(
-#     hass: core.HomeAssistant, config_entry: config_entries.ConfigEntry
-# ):
-#     """Handle options update."""
-#     await hass.config_entries.async_reload(config_entry.entry_id)
+"""
+async def options_update_listener(
+    hass: core.HomeAssistant, config_entry: config_entries.ConfigEntry
+ ):
+    await hass.config_entries.async_reload(config_entry.entry_id)
+"""
