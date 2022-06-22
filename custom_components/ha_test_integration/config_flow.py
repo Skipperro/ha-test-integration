@@ -32,7 +32,7 @@ class CustomFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    async def async_get_options_flow(config_entry):
+    def async_get_options_flow(config_entry):
         """Get the options flow for this handler."""
         return OptionsFlowHandler(config_entry)
 
