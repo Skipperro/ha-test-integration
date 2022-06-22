@@ -30,14 +30,14 @@
       "invalid_path": "The path provided is not valid. Should be in the format `user/repo-name` and should be a valid github repository."
     },
     "step": {
-      "init": {
-        "title": "Manage Repos",
+      "user": {
         "data": {
-          "repos": "Existing Repos: Uncheck any repos you want to remove.",
-          "path": "New Repo: Path to the repository e.g. home-assistant-core",
-          "name": "New Repo: Name of the sensor."
+          "access_token": "GitHub Access Token",
+          "url": "GitHub Enterprise server URL",
+          "scan_interval": "Delay between checks"
         },
-        "description": "Remove existing repos or add a new repo."
+        "description": "Enter your GitHub credentials.",
+        "title": "Authentication"
       }
     }
   }
