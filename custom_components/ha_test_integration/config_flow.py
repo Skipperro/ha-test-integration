@@ -28,7 +28,7 @@ class CustomFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self.data = user_input
             return self.async_create_entry(title="Test Integration", data=self.data)
 
-        return self.async_show_form(step_id="basics", data_schema=CONFIG_SCHEMA, errors=errors)
+        return self.async_show_form(step_id="user", data_schema=CONFIG_SCHEMA, errors=errors)
 
     @staticmethod
     @callback
@@ -50,4 +50,4 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             self.data = user_input
             return self.async_create_entry(title="Test Integration", data=self.data)
 
-        return self.async_show_form(step_id="options", data_schema=CONFIG_SCHEMA, errors=errors)
+        return self.async_show_form(step_id="init", data_schema=CONFIG_SCHEMA, errors=errors)
