@@ -1,6 +1,6 @@
 """Config flow for Hello World integration."""
 from __future__ import annotations
-
+import json
 import logging
 from typing import Any, Dict, Optional
 from homeassistant.const import CONF_ACCESS_TOKEN, CONF_NAME, CONF_PATH, CONF_URL, CONF_SCAN_INTERVAL
@@ -56,7 +56,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         entries = async_entries_for_config_entry(
             entity_registry, self.config_entry.entry_id
         )
-        _LOGGER.warning(self.config_entry)
+        _LOGGER.warning(json.dumps(self.config_entry))
         if user_input is not None:
             self.data = user_input
             return self.async_create_entry(title="Test Integration", data=self.data)
