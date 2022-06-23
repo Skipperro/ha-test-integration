@@ -37,7 +37,6 @@ async def async_setup_platform(
 class IPSensor(SensorEntity):
     """Representation of a Sensor."""
 
-
     def __init__(self, ipv6: bool):
         self.ipv6 = ipv6
         self._attr_icon = 'mdi:web'
