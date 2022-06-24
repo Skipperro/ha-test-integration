@@ -32,6 +32,8 @@ async def options_update_listener(
     hass: core.HomeAssistant, config_entry: config_entries.ConfigEntry
 ):
     """Handle options update."""
+    _LOGGER.warning(f'RELOADING with data: {config_entry.data}')
+    _LOGGER.warning(f'RELOADING with options: {config_entry.options}')
     await hass.config_entries.async_reload(config_entry.entry_id)
 
 
