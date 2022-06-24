@@ -25,8 +25,6 @@ async def async_setup_entry(
 ):
     config = hass.data[DOMAIN][config_entry.entry_id]
     if config_entry.options:
-        _LOGGER.warning('options present')
-        _LOGGER.warning(config_entry.options)
         config.update(config_entry.options)
     async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
 
