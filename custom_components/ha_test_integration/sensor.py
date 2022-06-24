@@ -21,7 +21,9 @@ async def async_setup_entry(
     async_add_entities,
 ):
     config = hass.data[DOMAIN][config_entry.entry_id]
-    async_add_entities([IPSensor(False), IPSensor(True)])
+    if config_entry.options:
+        config.update(config_entry.options)
+    async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
 
 async def async_setup_platform(
     hass: HomeAssistant,
@@ -30,7 +32,7 @@ async def async_setup_platform(
     discovery_info: DiscoveryInfoType | None = None
 ) -> None:
     """Set up the sensor platform."""
-    async_add_entities([IPSensor(False), IPSensor(True)])
+    async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
 
 
 

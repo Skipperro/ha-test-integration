@@ -11,7 +11,7 @@ from homeassistant import config_entries, exceptions
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_registry import (
     async_entries_for_config_entry,
-    async_get_registry,
+    async_get,
 )
 
 from .const import DOMAIN  # pylint:disable=unused-import
@@ -52,14 +52,15 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         self, user_input: Dict[str, Any] = None
     ) -> Dict[str, Any]:
         errors: Dict[str, str] = {}
-        entity_registry = await async_get_registry(self.hass)
+        entity_registry = async_get(self.hass)
         entries = async_entries_for_config_entry(
             entity_registry, self.config_entry.entry_id
         )
+        _LOGGER.warning(entries)
 
-        _LOGGER.warning(self.config_entry.data)
         if user_input is not None:
             self.data = user_input
+            _LOGGER.warning(user_input)
             return self.async_create_entry(title="Test Integration updt", data=self.data)
 
         defval = self.config_entry.data['scan_interval']
