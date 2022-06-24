@@ -61,7 +61,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             self.data = user_input
             _LOGGER.warning(user_input)
-            return self.async_create_entry(title="Test Integration updt", data=user_input, options=user_input)
+            return self.async_create_entry(title="Test Integration updt", data=user_input)
 
         defval = self.config_entry.data['scan_interval']
         OPTIONS_SCHEMA = vol.Schema(
