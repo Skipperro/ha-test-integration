@@ -1,6 +1,7 @@
 """Platform for sensor integration."""
 from __future__ import annotations
 
+import asyncio
 import datetime
 from datetime import timedelta
 
@@ -26,16 +27,27 @@ async def async_setup_entry(
     global SCAN_INTERVAL
     config = hass.data[DOMAIN][config_entry.entry_id]
 
+    reload_required = False
+
     if config_entry.options:
         config.update(config_entry.options)
         if 'scan_interval' in config_entry.options:
             _LOGGER.warning(f"Updating scan_interval from config_entry to {config_entry.options['scan_interval']}")
             SCAN_INTERVAL = datetime.timedelta(seconds=config_entry.options["scan_interval"])
+            reload_required = True
         else:
             if 'scan_interval' in config:
                 _LOGGER.warning(f"Updating scan_interval from config to {config['scan_interval']}")
                 SCAN_INTERVAL = datetime.timedelta(seconds=config["scan_interval"])
+                reload_required = True
     async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
+
+    # if reload is required, reload platform after 10 seconds
+    if reload_required:
+        await asyncio.sleep(10)
+        await hass.config_entries.async_reload(config_entry.entry_id)
+
+
 
 async def async_setup_platform(
     hass: HomeAssistant,
