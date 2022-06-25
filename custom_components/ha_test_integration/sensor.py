@@ -8,7 +8,7 @@ from homeassistant.components.sensor import (
 from homeassistant.core import HomeAssistant
 from homeassistant import config_entries
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.entity_registry import async_get_registry
+from homeassistant.helpers.entity_registry import async_get_registry, async_entries_for_config_entry
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from custom_components.ha_test_integration.const import DOMAIN
 import aiohttp
@@ -22,6 +22,7 @@ async def async_setup_entry(
     config_entry: config_entries.ConfigEntry,
     async_add_entities,
 ):
+    _LOGGER.warning("async_setup_entry")
     config = hass.data[DOMAIN][config_entry.entry_id]
     if config_entry.options:
         config.update(config_entry.options)
@@ -32,6 +33,14 @@ async def async_setup_entry(
     if 'check_ipv6' in config:
         if config['check_ipv6']:
             to_add.append(IPSensor(True))
+
+    entity_registry = await async_get_registry(hass)
+    entries = async_entries_for_config_entry(
+        entity_registry, config_entry.entry_id
+    )
+    for entry in entries:
+        entity_registry.async_remove(entry.entity_id)
+
     async_add_entities(to_add, update_before_add=True)
 
 
@@ -42,6 +51,7 @@ async def async_setup_platform(
     discovery_info: DiscoveryInfoType | None = None
 ) -> None:
     """Set up the sensor platform."""
+    _LOGGER.warning("async_setup_platform")
     to_add = []
     if 'check_ipv4' in config:
         if config['check_ipv4']:
@@ -49,6 +59,7 @@ async def async_setup_platform(
     if 'check_ipv6' in config:
         if config['check_ipv6']:
             to_add.append(IPSensor(True))
+
     async_add_entities(to_add, update_before_add=True)
 
 class IPSensor(SensorEntity):
