@@ -58,9 +58,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             entity_registry, self.config_entry.entry_id
         )
 
-        for entry in entries:
-            entity_registry.async_remove(entry.entity_id)
-
         if user_input is not None:
             self.data = user_input
             return self.async_create_entry(title="Test Integration", data={'check_ipv4': user_input['check_ipv4'], 'check_ipv6': user_input['check_ipv6']})

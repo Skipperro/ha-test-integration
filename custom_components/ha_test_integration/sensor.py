@@ -8,7 +8,7 @@ from homeassistant.components.sensor import (
 from homeassistant.core import HomeAssistant
 from homeassistant import config_entries
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.entity_registry import async_get_registry, async_entries_for_config_entry
+from homeassistant.helpers.entity_registry import async_get, async_entries_for_config_entry
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from custom_components.ha_test_integration.const import DOMAIN
 import aiohttp
@@ -34,7 +34,7 @@ async def async_setup_entry(
         if config['check_ipv6']:
             to_add.append(IPSensor(True))
 
-    entity_registry = await async_get_registry(hass)
+    entity_registry = async_get(hass)
     entries = async_entries_for_config_entry(
         entity_registry, config_entry.entry_id
     )
@@ -43,14 +43,13 @@ async def async_setup_entry(
 
     async_add_entities(to_add, update_before_add=True)
 
-
+"""
 async def async_setup_platform(
     hass: HomeAssistant,
     config: ConfigType,
     async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None
 ) -> None:
-    """Set up the sensor platform."""
     _LOGGER.warning("async_setup_platform")
     to_add = []
     if 'check_ipv4' in config:
@@ -61,6 +60,7 @@ async def async_setup_platform(
             to_add.append(IPSensor(True))
 
     async_add_entities(to_add, update_before_add=True)
+"""
 
 class IPSensor(SensorEntity):
     """Representation of a Sensor."""
@@ -80,9 +80,6 @@ class IPSensor(SensorEntity):
         else:
             url = 'https://api.ipify.org/?format=json'
 
-
-
-        """call the url using aiohttp and extract ip from result"""
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 if response.status == 200:
