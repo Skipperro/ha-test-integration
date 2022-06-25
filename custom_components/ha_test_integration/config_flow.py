@@ -21,7 +21,7 @@ big_int = vol.All(vol.Coerce(int), vol.Range(min=300))
 _LOGGER = logging.getLogger(__name__)
 CONFIG_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_SCAN_INTERVAL, "message", default=300, description="descri"): big_int,
+        vol.Required(CONF_SCAN_INTERVAL, default=300): big_int,
     }
 )
 
