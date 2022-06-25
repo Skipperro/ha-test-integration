@@ -16,9 +16,9 @@ async def async_setup_entry(
     hass.data.setdefault(DOMAIN, {})
     hass_data = dict(entry.data)
     # Registers update listener to update config entry when options are updated.
-    #unsub_options_update_listener = entry.add_update_listener(options_update_listener)
+    unsub_options_update_listener = entry.add_update_listener(options_update_listener)
     # Store a reference to the unsubscribe function to cleanup if an entry is unloaded.
-    #hass_data["unsub_options_update_listener"] = unsub_options_update_listener
+    hass_data["unsub_options_update_listener"] = unsub_options_update_listener
     hass.data[DOMAIN][entry.entry_id] = hass_data
 
     # Forward the setup to the sensor platform.
@@ -32,6 +32,7 @@ async def options_update_listener(
     hass: core.HomeAssistant, config_entry: config_entries.ConfigEntry
 ):
     """Handle options update."""
+    _LOGGER.warning("options_update_listener")
     await hass.config_entries.async_reload(config_entry.entry_id)
 
 
