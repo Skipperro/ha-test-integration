@@ -1,6 +1,7 @@
 """Platform for sensor integration."""
 from __future__ import annotations
 
+import datetime
 from datetime import timedelta
 
 from homeassistant.components.sensor import (
@@ -59,6 +60,7 @@ class IPSensor(SensorEntity):
         self._attr_scan_interval = timedelta(seconds=scan_interval)
 
     async def async_update(self) -> None:
+        _LOGGER.warning(f"Updating IP sensor: {datetime.datetime.now()}")
         if (self.ipv6):
             url = 'https://api64.ipify.org/?format=json'
         else:
