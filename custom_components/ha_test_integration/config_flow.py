@@ -20,10 +20,11 @@ big_int = vol.All(vol.Coerce(int), vol.Range(min=300))
 
 _LOGGER = logging.getLogger(__name__)
 CONFIG_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_SCAN_INTERVAL, default=300): cv.boolean,
-    }
-)
+            {
+                vol.Required('check_ipv4', default=True): cv.boolean,
+                vol.Required('check_ipv6', default=False): cv.boolean,
+            }
+        )
 
 class CustomFlow(config_entries.ConfigFlow, domain=DOMAIN):
     data: Optional[Dict[str, Any]]
@@ -56,6 +57,9 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         entries = async_entries_for_config_entry(
             entity_registry, self.config_entry.entry_id
         )
+
+        for entry in entries:
+            entity_registry.async_remove(entry.entity_id)
 
         if user_input is not None:
             self.data = user_input
