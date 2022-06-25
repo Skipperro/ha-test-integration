@@ -61,7 +61,11 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             self.data = user_input
             return self.async_create_entry(title="Test Integration updt", data={'scan_interval': user_input['scan_interval']})
 
-        defval = self.config_entry.options['scan_interval']
+        defval = 300
+        if 'scan_interval' in self.config_entry.data:
+            defval = self.config_entry.data['scan_interval']
+        if 'scan_interval' in self.config_entry.options:
+            defval = self.config_entry.options['scan_interval']
         OPTIONS_SCHEMA = vol.Schema(
             {
                 vol.Required(CONF_SCAN_INTERVAL, default=defval): big_int,
