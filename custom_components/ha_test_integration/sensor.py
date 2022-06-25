@@ -25,7 +25,14 @@ async def async_setup_entry(
     config = hass.data[DOMAIN][config_entry.entry_id]
     if config_entry.options:
         config.update(config_entry.options)
-    async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
+    to_add = []
+    if 'check_ipv4' in config:
+        if config['check_ipv4']:
+            to_add.append(IPSensor(False))
+    if 'check_ipv6' in config:
+        if config['check_ipv6']:
+            to_add.append(IPSensor(True))
+    async_add_entities(to_add, update_before_add=True)
 
 
 async def async_setup_platform(
