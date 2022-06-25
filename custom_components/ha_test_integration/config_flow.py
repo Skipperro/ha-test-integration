@@ -21,7 +21,7 @@ big_int = vol.All(vol.Coerce(int), vol.Range(min=300))
 _LOGGER = logging.getLogger(__name__)
 CONFIG_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_SCAN_INTERVAL, default=300): big_int,
+        vol.Required(CONF_SCAN_INTERVAL, default=300): cv.boolean,
     }
 )
 
@@ -59,16 +59,12 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
 
         if user_input is not None:
             self.data = user_input
-            return self.async_create_entry(title="Test Integration updt", data={'scan_interval': user_input['scan_interval']})
+            return self.async_create_entry(title="Test Integration", data={'check_ipv4': user_input['check_ipv4'], 'check_ipv6': user_input['check_ipv6']})
 
-        defval = 300
-        if 'scan_interval' in self.config_entry.data:
-            defval = self.config_entry.data['scan_interval']
-        if 'scan_interval' in self.config_entry.options:
-            defval = self.config_entry.options['scan_interval']
         OPTIONS_SCHEMA = vol.Schema(
             {
-                vol.Required(CONF_SCAN_INTERVAL, default=defval): big_int,
+                vol.Required('check_ipv4', default=True): cv.boolean,
+                vol.Required('check_ipv6', default=False): cv.boolean,
             }
         )
         return self.async_show_form(step_id="init", data_schema=OPTIONS_SCHEMA, errors=errors)

@@ -1,8 +1,5 @@
 """Platform for sensor integration."""
 from __future__ import annotations
-
-import asyncio
-import datetime
 from datetime import timedelta
 
 from homeassistant.components.sensor import (
@@ -17,37 +14,17 @@ import aiohttp
 import logging
 
 _LOGGER = logging.getLogger(__name__)
-SCAN_INTERVAL = datetime.timedelta(seconds=60)
+SCAN_INTERVAL = timedelta(seconds=300)
 
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: config_entries.ConfigEntry,
     async_add_entities,
 ):
-    global SCAN_INTERVAL
     config = hass.data[DOMAIN][config_entry.entry_id]
-
-    reload_required = False
-
     if config_entry.options:
         config.update(config_entry.options)
-        if 'scan_interval' in config_entry.options:
-            _LOGGER.warning(f"Updating scan_interval from config_entry to {config_entry.options['scan_interval']}")
-            SCAN_INTERVAL = datetime.timedelta(seconds=config_entry.options["scan_interval"])
-            reload_required = True
-        else:
-            if 'scan_interval' in config:
-                _LOGGER.warning(f"Updating scan_interval from config to {config['scan_interval']}")
-                SCAN_INTERVAL = datetime.timedelta(seconds=config["scan_interval"])
-                reload_required = True
     async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
-
-    # if reload is required, reload platform after 10 seconds
-    if reload_required:
-        await asyncio.sleep(10)
-        await hass.config_entries.async_reload(config_entry.entry_id)
-
-
 
 async def async_setup_platform(
     hass: HomeAssistant,
@@ -56,10 +33,6 @@ async def async_setup_platform(
     discovery_info: DiscoveryInfoType | None = None
 ) -> None:
     """Set up the sensor platform."""
-    global SCAN_INTERVAL
-    if 'scan_interval' in config:
-        _LOGGER.warning(f"Updating scan_interval from platform to {config['scan_interval']}")
-        SCAN_INTERVAL = datetime.timedelta(seconds=config["scan_interval"])
     async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
 
 
@@ -77,7 +50,6 @@ class IPSensor(SensorEntity):
             self._attr_unique_id = "publicipv6"
 
     async def async_update(self) -> None:
-        _LOGGER.warning(f"Updating IP sensor: {datetime.datetime.now()}")
         if (self.ipv6):
             url = 'https://api64.ipify.org/?format=json'
         else:

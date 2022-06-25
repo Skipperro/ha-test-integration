@@ -1,6 +1,6 @@
-import custom_components.ha_test_integration.sensor as sensor
 import unittest
-import asyncio
+import custom_components.ha_test_integration.sensor as sensor
+
 
 class IPSensorTest(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
