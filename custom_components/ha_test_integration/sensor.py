@@ -26,10 +26,11 @@ async def async_setup_entry(
     SCAN_INTERVAL = 300
     if config_entry.options:
         config.update(config_entry.options)
-        if 'scan_interval' in config.options:
-            SCAN_INTERVAL = config.options["scan_interval"]
-    if 'scan_interval' in config:
-        SCAN_INTERVAL = config["scan_interval"]
+        if 'scan_interval' in config_entry.options:
+            SCAN_INTERVAL = config_entry.options["scan_interval"]
+        else:
+            if 'scan_interval' in config:
+                SCAN_INTERVAL = config["scan_interval"]
     async_add_entities([IPSensor(SCAN_INTERVAL, False), IPSensor(SCAN_INTERVAL, True)], update_before_add=True)
 
 async def async_setup_platform(
