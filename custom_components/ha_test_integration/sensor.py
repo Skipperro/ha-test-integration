@@ -16,14 +16,16 @@ import aiohttp
 import logging
 
 _LOGGER = logging.getLogger(__name__)
+SCAN_INTERVAL = 300
 
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: config_entries.ConfigEntry,
     async_add_entities,
 ):
+    global SCAN_INTERVAL
     config = hass.data[DOMAIN][config_entry.entry_id]
-    SCAN_INTERVAL = 300
+
     if config_entry.options:
         config.update(config_entry.options)
         if 'scan_interval' in config_entry.options:
@@ -31,7 +33,7 @@ async def async_setup_entry(
         else:
             if 'scan_interval' in config:
                 SCAN_INTERVAL = config["scan_interval"]
-    async_add_entities([IPSensor(SCAN_INTERVAL, False), IPSensor(SCAN_INTERVAL, True)], update_before_add=True)
+    async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
 
 async def async_setup_platform(
     hass: HomeAssistant,
@@ -40,17 +42,17 @@ async def async_setup_platform(
     discovery_info: DiscoveryInfoType | None = None
 ) -> None:
     """Set up the sensor platform."""
-    SCAN_INTERVAL = 300
+    global SCAN_INTERVAL
     if 'scan_interval' in config:
         SCAN_INTERVAL = config["scan_interval"]
-    async_add_entities([IPSensor(SCAN_INTERVAL, False), IPSensor(SCAN_INTERVAL, True)], update_before_add=True)
+    async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
 
 
 
 class IPSensor(SensorEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, scan_interval: int, ipv6: bool):
+    def __init__(self, ipv6: bool):
         self.ipv6 = ipv6
         self._attr_icon = 'mdi:web'
         self._attr_name = "Public IPv4"
@@ -58,7 +60,6 @@ class IPSensor(SensorEntity):
         if (self.ipv6):
             self._attr_name = "Public IPv6"
             self._attr_unique_id = "publicipv6"
-        self._attr_scan_interval = timedelta(seconds=scan_interval)
 
     async def async_update(self) -> None:
         _LOGGER.warning(f"Updating IP sensor: {datetime.datetime.now()}")
