@@ -61,10 +61,21 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             self.data = user_input
             return self.async_create_entry(title="Test Integration", data={'check_ipv4': user_input['check_ipv4'], 'check_ipv6': user_input['check_ipv6']})
 
+        default_ipv4 = True
+        if 'check_ipv4' in self.config_entry.data:
+            default_ipv4 = self.config_entry.data['check_ipv4']
+        if 'check_ipv4' in self.config_entry.options:
+            default_ipv4 = self.config_entry.options['check_ipv4']
+        default_ipv6 = False
+        if 'check_ipv6' in self.config_entry.data:
+            default_ipv6 = self.config_entry.data['check_ipv6']
+        if 'check_ipv6' in self.config_entry.options:
+            default_ipv6 = self.config_entry.options['check_ipv6']
+
         OPTIONS_SCHEMA = vol.Schema(
             {
-                vol.Required('check_ipv4', default=self.config_entry.options['check_ipv4']): cv.boolean,
-                vol.Required('check_ipv6', default=self.config_entry.options['check_ipv6']): cv.boolean,
+                vol.Required('check_ipv4', default=default_ipv4): cv.boolean,
+                vol.Required('check_ipv6', default=default_ipv6): cv.boolean,
             }
         )
         return self.async_show_form(step_id="init", data_schema=OPTIONS_SCHEMA, errors=errors)
