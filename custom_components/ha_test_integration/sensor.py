@@ -16,7 +16,7 @@ import aiohttp
 import logging
 
 _LOGGER = logging.getLogger(__name__)
-SCAN_INTERVAL = 300
+SCAN_INTERVAL = datetime.timedelta(seconds=60)
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -29,10 +29,10 @@ async def async_setup_entry(
     if config_entry.options:
         config.update(config_entry.options)
         if 'scan_interval' in config_entry.options:
-            SCAN_INTERVAL = config_entry.options["scan_interval"]
+            SCAN_INTERVAL = datetime.timedelta(seconds=config_entry.options["scan_interval"])
         else:
             if 'scan_interval' in config:
-                SCAN_INTERVAL = config["scan_interval"]
+                SCAN_INTERVAL = datetime.timedelta(seconds=config["scan_interval"])
     async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
 
 async def async_setup_platform(
@@ -44,7 +44,7 @@ async def async_setup_platform(
     """Set up the sensor platform."""
     global SCAN_INTERVAL
     if 'scan_interval' in config:
-        SCAN_INTERVAL = config["scan_interval"]
+        SCAN_INTERVAL = datetime.timedelta(seconds=config["scan_interval"])
     async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
 
 
