@@ -33,9 +33,14 @@ async def async_setup_platform(
     discovery_info: DiscoveryInfoType | None = None
 ) -> None:
     """Set up the sensor platform."""
-    async_add_entities([IPSensor(False), IPSensor(True)], update_before_add=True)
-
-
+    to_add = []
+    if 'check_ipv4' in config:
+        if config['check_ipv4']:
+            to_add.append(IPSensor(False))
+    if 'check_ipv6' in config:
+        if config['check_ipv6']:
+            to_add.append(IPSensor(True))
+    async_add_entities(to_add, update_before_add=True)
 
 class IPSensor(SensorEntity):
     """Representation of a Sensor."""

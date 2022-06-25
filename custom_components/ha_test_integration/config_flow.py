@@ -63,8 +63,8 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
 
         OPTIONS_SCHEMA = vol.Schema(
             {
-                vol.Required('check_ipv4', default=True): cv.boolean,
-                vol.Required('check_ipv6', default=False): cv.boolean,
+                vol.Required('check_ipv4', default=self.config_entry.options['check_ipv4']): cv.boolean,
+                vol.Required('check_ipv6', default=self.config_entry.options['check_ipv6']): cv.boolean,
             }
         )
         return self.async_show_form(step_id="init", data_schema=OPTIONS_SCHEMA, errors=errors)
