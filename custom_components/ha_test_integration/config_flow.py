@@ -1,20 +1,14 @@
-"""Config flow for Hello World integration."""
+"""Config flow for IP check integration."""
 from __future__ import annotations
-import json
 import logging
 from typing import Any, Dict, Optional
-from homeassistant.const import CONF_ACCESS_TOKEN, CONF_NAME, CONF_PATH, CONF_URL, CONF_SCAN_INTERVAL
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 
-from homeassistant import config_entries, exceptions
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.entity_registry import (
-    async_entries_for_config_entry,
-    async_get,
-)
+from homeassistant import config_entries
+from homeassistant.core import callback
 
-from .const import DOMAIN  # pylint:disable=unused-import
+from .const import DOMAIN
 
 big_int = vol.All(vol.Coerce(int), vol.Range(min=300))
 
@@ -53,10 +47,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         self, user_input: Dict[str, Any] = None
     ) -> Dict[str, Any]:
         errors: Dict[str, str] = {}
-        entity_registry = async_get(self.hass)
-        entries = async_entries_for_config_entry(
-            entity_registry, self.config_entry.entry_id
-        )
 
         if user_input is not None:
             self.data = user_input

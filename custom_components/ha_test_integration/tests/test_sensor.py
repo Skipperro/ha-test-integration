@@ -1,13 +1,13 @@
 import unittest
 import custom_components.ha_test_integration.sensor as sensor
 
-
 class IPSensorTest(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.ipv4 = sensor.IPSensor(False)
         self.ipv6 = sensor.IPSensor(True)
 
     def validate_ipv4(self, s: str):
+        # IPv4 address is a string of 4 numbers separated by dots
         a = s.split('.')
         if len(a) != 4:
             return False

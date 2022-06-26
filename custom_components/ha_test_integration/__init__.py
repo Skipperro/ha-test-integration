@@ -1,4 +1,4 @@
-"""GitHub Custom Component."""
+"""IP Custom Component."""
 import asyncio
 import logging
 
@@ -32,7 +32,6 @@ async def options_update_listener(
     hass: core.HomeAssistant, config_entry: config_entries.ConfigEntry
 ):
     """Handle options update."""
-    _LOGGER.warning("options_update_listener")
     await hass.config_entries.async_reload(config_entry.entry_id)
 
 
@@ -46,7 +45,7 @@ async def async_unload_entry(
         )
     )
     # Remove options_update_listener.
-    #hass.data[DOMAIN][entry.entry_id]["unsub_options_update_listener"]()
+    hass.data[DOMAIN][entry.entry_id]["unsub_options_update_listener"]()
 
     # Remove config entry from domain.
     if unload_ok:
@@ -55,6 +54,5 @@ async def async_unload_entry(
     return unload_ok
 
 async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
-    """Set up the GitHub Custom component from yaml configuration."""
     hass.data.setdefault(DOMAIN, {})
     return True

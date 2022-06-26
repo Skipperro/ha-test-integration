@@ -7,12 +7,11 @@
     "step": {
       "user": {
         "data": {
-          "access_token": "GitHub Access Token",
-          "url": "GitHub Enterprise server URL",
-          "scan_interval": "Delay between checks"
+          "check_ipv4": "Check IPv4 address",
+          "check_ipv6": "Check IPv6 address"
         },
-        "description": "Enter your GitHub credentials.",
-        "title": "Authentication"
+        "description": "Select which addresses to check.",
+        "title": "IP settings"
       },
       "repo": {
         "data": {
@@ -33,8 +32,7 @@
       "init": {
         "data": {
           "check_ipv4": "Check IPv4 address",
-          "check_ipv6": "Check IPv6 address",
-          "scan_interval": "Delay between checks"
+          "check_ipv6": "Check IPv6 address"
         },
         "description": "Select which addresses to check.",
         "title": "IP settings"
