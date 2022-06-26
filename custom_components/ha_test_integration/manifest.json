@@ -1,7 +1,7 @@
 {
   "domain": "ha_test_integration",
   "name": "Test Integration",
-  "documentation": "https://github.com/home-assistant/example-custom-config/tree/master/custom_components/example_sensor/",
+  "documentation": "https://github.com/Skipperro/ha-test-integration",
   "dependencies": [],
   "codeowners": [],
   "requirements": [],
